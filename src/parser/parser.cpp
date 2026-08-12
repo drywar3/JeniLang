@@ -5,12 +5,8 @@
 #include "lexer/source_location.hpp"
 #include "lexer/token.hpp"
 #include "parser/token_stream.hpp"
-#include "units/source_file.hpp"
 #include "common/common.hpp"
-#include <algorithm>
 #include <optional>
-#include <print>
-#include <string>
 #include <string_view>
 #include <vector>
 
@@ -28,9 +24,9 @@ auto TokenStream::init(DiagnosticPool &diagnostics, std::string_view source,
     return {.index = 0, .tokens = tokens};
 }
 
-Parser::Parser(DiagnosticPool &diagnostics, Compiler &compiler,
+Parser::Parser(PackageId package_id, DiagnosticPool &diagnostics, Compiler &compiler,
                std::string_view source, SourceId source_id)
-    : m_diagnostics(diagnostics), m_compiler(compiler), m_source(source),
+    : m_package_id(package_id), m_diagnostics(diagnostics), m_compiler(compiler), m_source(source),
       m_source_id(source_id),
       m_token_stream(TokenStream::init(m_diagnostics, m_source, m_source_id)) {}
 
@@ -137,8 +133,8 @@ auto Parser::is_sequence(this Parser const &self,
 auto Parser::slice(this Parser const &self, SourceLocation location)
     -> std::string_view {
     return self.m_compiler.get_source_file(location.id)
-        ->get_line(location.first_line - 1)
-        .subview(location.begin - 1, location.length());
+        ->content()
+        .subview(location.begin, location.length());
 }
 
 auto Parser::skip_to(this Parser &self, TokenKind kind, bool one_past) -> bool {

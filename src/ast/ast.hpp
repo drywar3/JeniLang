@@ -3,4 +3,12 @@
 #include "ast/item.hpp"
 #include <vector>
 
-using AstProgram = std::vector<ItemRef>;
+using Ast = std::vector<ItemRef>;
+
+struct AstId {
+public:
+	explicit AstId(usize id)
+		: id(id) {}
+
+	usize const id;
+};

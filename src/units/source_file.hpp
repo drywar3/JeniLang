@@ -13,16 +13,11 @@ struct SourceFile {
     auto content(this SourceFile const &self) {
         return self.m_content.subview();
     }
-    auto lines(this SourceFile const &self)
-        -> std::vector<std::string_view> const &;
-
-    auto get_line(this SourceFile const &self, usize line)
-        -> std::string_view const &;
 
   private:
     std::string m_content;
     std::string m_path;
-    std::vector<std::string_view> m_lines;
+    std::vector<usize> m_line_starts;
 };
 
 bool open_source_file(SourceFile &out, std::string path);

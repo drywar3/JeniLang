@@ -21,3 +21,5 @@ auto filter_attribute_list_by(AttributeList const &attrs, ItemKind item_kind);
 
 auto parse_variable_declaration(Parser &parser, AttributeList attrs)
     -> std::optional<std::unique_ptr<VariableDeclaration>>;
+auto parse_compound_statement(Parser &parser)
+	-> std::optional<std::unique_ptr<CompoundStatement>>;

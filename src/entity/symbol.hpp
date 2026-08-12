@@ -1,8 +1,14 @@
+#pragma once
+
 #include "common/common.hpp"
 #include "lexer/source_location.hpp"
 #include <memory>
+#include <optional>
 #include <string>
 #include <string_view>
+
+template<typename T>
+using MaybeUndefined = std::optional<T>;
 
 class Symbol {
   public:

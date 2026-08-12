@@ -27,16 +27,30 @@ template <typename Key, typename Value> class IdMap {
     }
 
     auto replace_or_insert(this IdMap &self, Key key, Value value) -> usize {
-        TODO();
+        if (auto id = self.id_of(key); id.has_value()) {
+            self.m_pool[id.value()] = std::move(value);
+            return id.value();
+        } else {
+            usize new_id = self.m_pool.size();
+            self.m_pool.push_back(std::move(value));
+            self.m_map[key] = new_id;
+            return new_id;
+        }
     }
     auto contains(this IdMap const &self, Key const &key) -> bool { TODO(); }
 
-    auto get(this IdMap &self, Key const &key) -> std::optional<Value &> {
-        TODO();
+    auto get(this IdMap &self, Key const &key) -> Value * {
+        if (self.m_map.contains(key)) {
+            return &self.m_pool.at(self.m_map.at(key));
+        }
+        return nullptr;
     }
     auto get(this IdMap const &self, Key const &key)
-        -> std::optional<Value const &> {
-        TODO();
+        -> Value const * {
+        if (self.m_map.contains(key)) {
+            return &self.m_pool.at(self.m_map.at(key));
+        }
+        return nullptr;
     }
 
     auto get_from_id(this IdMap &self, usize id) -> std::optional<Value &> {
@@ -46,9 +60,18 @@ template <typename Key, typename Value> class IdMap {
     }
 
     auto get_from_id(this IdMap const &self, usize id)
-        -> std::optional<Value const &> {
+        -> Value const * {
         if (id >= self.m_pool.size())
-            return std::nullopt;
+            return nullptr;
+        return &self.m_pool[id];
+    }
+
+    auto get_from_id_unchecked(this IdMap &self, usize id) -> Value * {
+        return &self.m_pool[id];
+    }
+
+    auto get_from_id_unchecked(this IdMap const &self, usize id)
+        -> Value const & {
         return self.m_pool[id];
     }
 

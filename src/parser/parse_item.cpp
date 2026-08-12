@@ -81,7 +81,7 @@ auto parse_variable_declaration(Parser &parser, AttributeList attrs)
     return var;
 }
 
-static auto parse_function_prototype(Parser &parser, FunctionPrototype &prototype) 
+static auto parse_function_prototype(Parser &parser, FunctionPrototype &prototype)
     -> bool {
     if (!parser.try_eat(TokenKind::SpOpenParen)) PANIC("expected `(` function parameter list");
 

@@ -15,7 +15,7 @@ auto parse_primary(Parser &parser) -> ParseResult {
         return std::make_unique<IntegerLiteral>(parser.previous().location,
                                                 int_value);
     }
-    UNREACHABLE();
+    PANIC("(%s)", to_string(parser.current().kind).data());
 }
 
 auto parse_postfix(Parser &parser) -> ParseResult {

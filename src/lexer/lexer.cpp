@@ -7,8 +7,7 @@
 #include <string_view>
 
 Lexer::Lexer(std::string_view source, SourceId source_id)
-    : m_source(source), m_source_id(source_id), m_offset(0), m_line(1),
-      m_prev_line(1), m_column(1), m_prev_column(1) {}
+    : m_source(source), m_source_id(source_id), m_offset(0), m_prev_offset(0) {}
 
 struct TokenSpec {
     std::string_view text;
@@ -75,18 +74,16 @@ static constexpr std::initializer_list<TokenSpec> PUNCTS = {
     {",", TokenKind::SpComma},        {":", TokenKind::SpColon},
     {".", TokenKind::SpDot},          {"(", TokenKind::SpOpenParen},
     {"[", TokenKind::SpOpenBracket},  {"{", TokenKind::SpOpenBrace},
-    {")", TokenKind::SpCloseParen},   {"]", TokenKind::SpCloseBrace},
-    {"}", TokenKind::SpCloseBracket},
+    {")", TokenKind::SpCloseParen},   {"]", TokenKind::SpCloseBracket},
+    {"}", TokenKind::SpCloseBrace},
 
     {"&", TokenKind::OpAmp},
 };
 
 auto Lexer::get_location(this Lexer const &self) -> SourceLocation {
     return SourceLocation(self.m_source_id)
-        .fline(self.m_prev_line)
-        .lline(self.m_line)
-        .fcol(self.m_prev_column)
-        .lcol(self.m_column);
+        .with_begin(self.m_prev_offset)
+        .with_end(self.m_offset);
 }
 
 auto Lexer::get_token(this Lexer const &self, TokenKind kind) -> Token {
@@ -124,8 +121,7 @@ auto Lexer::next_token(this Lexer &self) -> std::expected<Token, Diagnostic> {
         return self.get_token(TokenKind::EndOfFile);
     }
 
-    self.m_prev_column = self.m_column;
-    self.m_prev_line   = self.m_line;
+    self.m_prev_offset = self.m_offset;
 
     if (std::isalpha(self.current()) or self.current() == '_') {
         usize begin = self.m_offset;
@@ -174,13 +170,6 @@ auto Lexer::eat_prefix(this Lexer &self, std::string_view prefix) -> bool {
 
 auto Lexer::next(this Lexer &self) -> char {
     char ch = self.current();
-    if (std::string_view("\r\n").contains(ch)) {
-        self.m_line += 1;
-        self.m_column = 1;
-    } else {
-        self.m_column += 1;
-    }
-
     self.m_offset += 1;
     return ch;
 }

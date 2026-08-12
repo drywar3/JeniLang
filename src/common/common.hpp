@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
+#include <memory>
+#include <ranges>
 
 #define PANIC(msg, ...)                                                        \
     do {                                                                       \
@@ -49,3 +51,9 @@ struct SourceId {
     usize id;
     explicit SourceId(usize id) : id(id) {}
 };
+
+template<typename T>
+using ref = std::reference_wrapper<T>;
+
+template<typename T>
+using Box = std::unique_ptr<T>;

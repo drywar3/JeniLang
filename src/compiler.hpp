@@ -25,9 +25,9 @@ class Compiler {
     auto get_source_file(this Compiler const &, SourceId id)
         -> std::optional<SourceFile const &>;
 
-    auto get_package(this Compiler &, PackageId id) -> std::optional<Package &>;
+    auto get_package(this Compiler &, PackageId id) -> std::optional<Package *>;
     auto get_package(this Compiler const &, PackageId id)
-        -> std::optional<Package const &>;
+        -> std::optional<Package const *>;
 
   private:
     std::vector<Package> m_packages;

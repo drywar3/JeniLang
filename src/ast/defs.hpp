@@ -7,6 +7,7 @@
 #include "ast/type_hint.hpp"
 #include "lexer/source_location.hpp"
 #include <optional>
+#include <sstream>
 #include <vector>
 
 struct VariableDeclaration : public Item, public Statement {
@@ -34,6 +35,8 @@ struct VariableDeclaration : public Item, public Statement {
     auto get_mutability(this VariableDeclaration &self) {
         return self.m_mutability;
     }
+
+    auto to_string(std::stringstream &) const -> void override;
 
   private:
     Mutability m_mutability;
@@ -88,9 +91,20 @@ struct FunctionDeclaration : public Item {
     auto get_prototype(this FunctionDeclaration const &)
         -> FunctionPrototype const &;
 
+    auto to_string(std::stringstream &) const -> void override;
   private:
     Name m_name;
     FunctionPrototype m_prototype;
     FunctionDeclaration::Effects m_effects;
     std::optional<StatementRef> m_body;
+};
+
+struct CompoundStatement: public Statement {
+public:
+    using Body = std::vector<StatementRef>;
+
+    CompoundStatement(SourceLocation begin, SourceLocation end, Body &body);
+private:
+    Body m_body;
+    SourceLocation m_begin, m_end;
 };

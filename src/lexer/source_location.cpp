@@ -4,6 +4,5 @@
 auto SourceLocation::merge(this SourceLocation const &self,
                            SourceLocation const &other) -> SourceLocation {
     assert(self.id.id == other.id.id);
-    return SourceLocation(self.id, self.first_line, other.last_line, self.begin,
-                          other.end);
+    return SourceLocation(self.id, self.begin, other.end);
 }

@@ -6,16 +6,15 @@
 #include "lexer/token.hpp"
 #include "entity/namespace.hpp"
 #include "parser/token_stream.hpp"
-#include "units/source_file.hpp"
-#include <cstdio>
+#include "units/package.hpp"
 #include <initializer_list>
 #include <optional>
 #include <string_view>
 
 struct Parser {
   public:
-    Parser(DiagnosticPool &, Compiler &, std::string_view source,
-           SourceId source_id);
+    Parser(PackageId, DiagnosticPool &, Compiler &, std::string_view,
+           SourceId);
 
     auto current(this Parser const &self) -> Token;
     auto previous(this Parser const &self) -> Token;
@@ -66,8 +65,9 @@ struct Parser {
         -> std::string_view;
 
     auto m_get_cc() { return &m_compiler; }
-
+    auto get_package(this Parser const &self) -> PackageId { return self.m_package_id; }
   private:
+    PackageId m_package_id;
     DiagnosticPool &m_diagnostics;
     Compiler &m_compiler;
     std::string_view m_source;
@@ -75,4 +75,4 @@ struct Parser {
     TokenStream m_token_stream;
 };
 
-auto parse_into_namespace(Parser &, Namespace *out) -> void;
+auto parse_into_namespace(Parser &, Namespace &out) -> void;

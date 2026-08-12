@@ -13,6 +13,7 @@ enum struct StatementKind {
     Return,
     Break,
     Continue,
+    CompoundStatement,
     Expression,
 };
 

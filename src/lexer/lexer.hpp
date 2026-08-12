@@ -30,6 +30,5 @@ struct Lexer {
   private:
     std::string_view m_source;
     SourceId m_source_id;
-    usize m_offset;
-    usize m_line, m_prev_line, m_column, m_prev_column;
+    usize m_offset, m_prev_offset;
 };

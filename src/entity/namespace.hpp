@@ -5,12 +5,15 @@
 #include "lexer/source_location.hpp"
 
 class Namespace : public Symbol {
+    using parent_ref = std::optional<SymbolId>;
   public:
-    Namespace(std::string const &name, SourceLocation definition);
+    Namespace(std::string const &name, SourceLocation definition_location, std::optional<AstId> id = std::nullopt);
 
-    auto get_ast(this Namespace &self) -> AstProgram & { return self.m_ast; }
+    auto get_ast_id(this Namespace const &self) -> AstId;
+
+	static auto with_ast(std::string const &name, SourceLocation definition_location, AstId id) -> Namespace;
 
   private:
-    SymbolRef m_parent;
-    AstProgram m_ast;
+    parent_ref m_parent;
+    std::optional<AstId> m_ast_id;
 };

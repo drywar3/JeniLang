@@ -3,8 +3,10 @@
 #include "parser/parser.hpp"
 #include "units/package.hpp"
 #include "units/source_file.hpp"
+#include "sema/this.hpp"
 #include <expected>
 #include <filesystem>
+#include <optional>
 
 Compiler::~Compiler() {}
 
@@ -36,16 +38,19 @@ auto Compiler::new_package(this Compiler &self, std::string const &name,
 
 auto Compiler::compile_package(this Compiler &self, PackageId pkgid,
                                DiagnosticPool &diagnostics) -> void {
-    auto package = self.get_package(pkgid);
+    auto package = self.get_package(pkgid).value();
     if (auto source_file =
             self.get_source_file(package->get_root_source_file());
         source_file.has_value()) {
-        auto root_namespace_ = package->get_symbol(package->get_root());
+        auto *root_namespace_ = package->get_root();
         auto root_namespace =
-            static_cast<Namespace *>(root_namespace_.value().get());
-        Parser parser{diagnostics, self, source_file.value().content(),
+            static_cast<Namespace *>(root_namespace_->get());
+        Parser parser{pkgid, diagnostics, self, source_file.value().content(),
                       package->get_root_source_file()};
-        parse_into_namespace(parser, root_namespace);
+        parse_into_namespace(parser, *root_namespace);
+
+        SemanticAnalyzer sema{pkgid, self, diagnostics};
+        sema.run();
     } else {
         PANIC();
     }
@@ -58,15 +63,18 @@ auto Compiler::get_source_file(this Compiler &self, SourceId id)
 
 auto Compiler::get_source_file(this Compiler const &self, SourceId id)
     -> std::optional<SourceFile const &> {
-    return self.m_sources.get_from_id(id.id);
+    auto *source_file = self.m_sources.get_from_id(id.id);
+    if (source_file != nullptr)
+        return *source_file;
+    return std::nullopt;
 }
 
 auto Compiler::get_package(this Compiler &self, PackageId id)
-    -> std::optional<Package &> {
-    return self.m_packages[id.id];
+    -> std::optional<Package *> {
+    return &self.m_packages[id.id];
 }
 
 auto Compiler::get_package(this Compiler const &self, PackageId id)
-    -> std::optional<Package const &> {
-    return self.m_packages[id.id];
+    -> std::optional<Package const *> {
+    return &self.m_packages[id.id];
 }

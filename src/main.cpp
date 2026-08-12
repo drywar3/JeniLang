@@ -1,7 +1,6 @@
 #include "compiler.hpp"
 #include "diagnostic.hpp"
 #include "units/package.hpp"
-#include "units/source_file.hpp"
 #include <cstdio>
 
 int main(int argc, char **argv) {

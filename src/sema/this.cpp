@@ -14,28 +14,31 @@ auto SemanticAnalyzer::get_package(this SemanticAnalyzer const &self) -> Package
 }
 
 
-auto SemanticAnalyzer::find_symbol(this SemanticAnalyzer const &self, std::string_view name) -> SymbolRef const * {
+auto SemanticAnalyzer::find_symbol(this SemanticAnalyzer const &self, std::string_view name) -> Symbol const * {
     Scope const &scope = self.get_package()->get_scope(self.m_current_scope);
-    return scope.get_from_name(name);
+    return scope.get_from_name(name)->get();
 }
 
-auto SemanticAnalyzer::find_symbol(this SemanticAnalyzer &self, std::string_view name) -> SymbolRef * { 
+auto SemanticAnalyzer::find_symbol(this SemanticAnalyzer &self, std::string_view name) -> Symbol * { 
     Scope &scope = self.get_package()->get_scope(self.m_current_scope);
-    return scope.get_from_name(name);
+    return scope.get_from_name(name)->get();
 }
 
-auto SemanticAnalyzer::find_symbol_eagerly(this SemanticAnalyzer const &, std::string_view) -> SymbolRef const * { TODO(); }
-auto SemanticAnalyzer::find_symbol_eagerly(this SemanticAnalyzer &, std::string_view) -> SymbolRef* { TODO(); }
-auto SemanticAnalyzer::find_symbol_in(this SemanticAnalyzer const &, ScopeId, std::string_view) -> SymbolRef const * { TODO(); }
+auto SemanticAnalyzer::find_symbol_eagerly(this SemanticAnalyzer const &, std::string_view) -> Symbol const * { TODO(); }
+auto SemanticAnalyzer::find_symbol_eagerly(this SemanticAnalyzer &, std::string_view) -> Symbol* { TODO(); }
+auto SemanticAnalyzer::find_symbol_in(this SemanticAnalyzer const &, ScopeId, std::string_view) -> Symbol const * { TODO(); }
 
-auto SemanticAnalyzer::find_symbol_in(this SemanticAnalyzer &self, ScopeId scope_id, std::string_view name) -> SymbolRef * { 
+auto SemanticAnalyzer::find_symbol_in(this SemanticAnalyzer &self, ScopeId scope_id, std::string_view name) -> Symbol * { 
     auto *package = self.get_package();
     auto &scope = package->get_scope(scope_id);
-    return scope.get_from_name(name);
+    if (auto x = scope.get_from_name(name)) {
+        return x->get();
+    }
+    return nullptr;
 }
 
-auto SemanticAnalyzer::find_symbol_eagerly_in(this SemanticAnalyzer const &, ScopeId, std::string_view) -> SymbolRef const * { TODO(); }
-auto SemanticAnalyzer::find_symbol_eagerly_in(this SemanticAnalyzer &, ScopeId, std::string_view) -> SymbolRef* { TODO(); }
+auto SemanticAnalyzer::find_symbol_eagerly_in(this SemanticAnalyzer const &, ScopeId, std::string_view) -> Symbol const * { TODO(); }
+auto SemanticAnalyzer::find_symbol_eagerly_in(this SemanticAnalyzer &, ScopeId, std::string_view) -> Symbol* { TODO(); }
 
 auto SemanticAnalyzer::register_symbol(this SemanticAnalyzer &self, ScopeId scope_id, SymbolRef symbol) -> SymbolId {
     auto *package = self.get_package();

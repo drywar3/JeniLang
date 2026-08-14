@@ -5,7 +5,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <memory>
-#include <ranges>
 
 #define PANIC(msg, ...)                                                        \
     do {                                                                       \

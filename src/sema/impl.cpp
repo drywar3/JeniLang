@@ -1,5 +1,6 @@
 #include "common/common.hpp"
 #include "entity/function.hpp"
+#include "sema/checks/this.hpp"
 #include "this.hpp"
 #include "impl.hpp"
 #include "ast/defs.hpp"
@@ -20,7 +21,7 @@ auto run_discovery_phase(SemanticAnalyzer &sema) -> bool {
 
 auto SemanticAnalyzer::run(this SemanticAnalyzer &self) -> void {
     run_discovery_phase(self);
-    TODO();
+    sema::run_semantic_checks(self);
 }
 
 auto sema::register_item(SemanticAnalyzer &sema, ItemRef const &item) -> bool {
@@ -38,7 +39,7 @@ auto sema::register_function(SemanticAnalyzer &sema, ItemRef const &item)
         static_cast<FunctionDeclaration const *>(item.get());
     if (auto symbol =
             sema.find_symbol_in(GLOBAL_SCOPE, function->get_name().name)) {
-        PANIC("redeclaration of symbol: %s", symbol->get()->get_name().data());
+        PANIC("redeclaration of symbol: %s", symbol->get_name().data());
     }
     Box<FunctionSymbol> symbol = std::make_unique<FunctionSymbol>(
         std::string(function->get_name().name), function->get_name().location);

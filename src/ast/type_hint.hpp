@@ -2,6 +2,7 @@
 
 #include "lexer/source_location.hpp"
 #include <memory>
+
 enum struct Mutability {
     Mutable,
     Immutable,

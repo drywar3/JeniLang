@@ -7,6 +7,7 @@
 #include "ast/type_hint.hpp"
 #include "lexer/source_location.hpp"
 #include <optional>
+#include <span>
 #include <sstream>
 #include <vector>
 
@@ -91,6 +92,9 @@ struct FunctionDeclaration : public Item {
     auto get_prototype(this FunctionDeclaration const &)
         -> FunctionPrototype const &;
 
+    auto get_body(this FunctionDeclaration &) -> Statement *;
+    auto get_body(this FunctionDeclaration const &) -> Statement const*;
+
     auto to_string(std::stringstream &) const -> void override;
   private:
     Name m_name;
@@ -104,6 +108,8 @@ public:
     using Body = std::vector<StatementRef>;
 
     CompoundStatement(SourceLocation begin, SourceLocation end, Body &body);
+
+    auto get_body(this CompoundStatement const &) -> std::vector<StatementRef> const &;
 private:
     Body m_body;
     SourceLocation m_begin, m_end;

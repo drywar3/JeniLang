@@ -2,6 +2,7 @@
 
 #include "common/common.hpp"
 #include "lexer/source_location.hpp"
+#include <expected>
 #include <memory>
 #include <optional>
 #include <string>
@@ -9,6 +10,9 @@
 
 template<typename T>
 using MaybeUndefined = std::optional<T>;
+
+template<typename T, typename With>
+using MayError = std::expected<T, With>;
 
 class Symbol {
   public:

@@ -1,8 +1,12 @@
 #pragma once
 
+#include "ast/expression.hpp"
+#include "ast/item.hpp"
+#include "ast/statement.hpp"
 #include "entity/symbol.hpp"
 #include <functional>
 #include <unordered_map>
+#include <variant>
 
 struct SemanticAnalyzer;
 
@@ -13,7 +17,8 @@ enum struct TaskResult {
 
 struct Task {
   public:
-    using Callback = std::function<TaskResult(SemanticAnalyzer&)>;
+    using Payload  = std::variant<Item const*, Statement const*, Expression const*>;
+    using Callback = std::function<TaskResult(SemanticAnalyzer&, Payload)>;
 
     enum struct TargetStage {        
         TypeCheck,

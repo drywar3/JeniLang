@@ -4,8 +4,8 @@
 #include "ast/type_hint.hpp"
 
 struct TypeId {
-    explicit TypeId(usize id) : id(id) {}
-    usize const id;
+    constexpr TypeId(usize id) : id(id) {}
+    usize id;
 
     auto operator==(this TypeId one, TypeId two) -> bool {
         return one.id == two.id;
@@ -14,7 +14,7 @@ struct TypeId {
 
 struct TypeInfo {
     public:
-        TypeId id;
+        TypeId id{0};
         Mutability mutability;
 
         auto operator==(this TypeInfo one,

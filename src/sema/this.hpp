@@ -13,17 +13,17 @@ struct SemanticAnalyzer {
         auto get_package(this SemanticAnalyzer &) -> Package *;
         auto get_package(this SemanticAnalyzer const &) -> Package const*;
 
-        auto find_symbol(this SemanticAnalyzer const &, std::string_view) -> SymbolRef const *;
-        auto find_symbol(this SemanticAnalyzer &, std::string_view) -> SymbolRef *;
+        auto find_symbol(this SemanticAnalyzer const &, std::string_view) -> Symbol const *;
+        auto find_symbol(this SemanticAnalyzer &, std::string_view) -> Symbol *;
 
-        auto find_symbol_eagerly(this SemanticAnalyzer const &, std::string_view) -> SymbolRef const *;
-        auto find_symbol_eagerly(this SemanticAnalyzer &, std::string_view) -> SymbolRef*;
+        auto find_symbol_eagerly(this SemanticAnalyzer const &, std::string_view) -> Symbol const *;
+        auto find_symbol_eagerly(this SemanticAnalyzer &, std::string_view) -> Symbol*;
 
-        auto find_symbol_in(this SemanticAnalyzer const &, ScopeId, std::string_view) -> SymbolRef const *;
-        auto find_symbol_in(this SemanticAnalyzer &, ScopeId, std::string_view) -> SymbolRef *;
+        auto find_symbol_in(this SemanticAnalyzer const &, ScopeId, std::string_view) -> Symbol const *;
+        auto find_symbol_in(this SemanticAnalyzer &, ScopeId, std::string_view) -> Symbol *;
 
-        auto find_symbol_eagerly_in(this SemanticAnalyzer const &, ScopeId, std::string_view) -> SymbolRef const *;
-        auto find_symbol_eagerly_in(this SemanticAnalyzer &, ScopeId, std::string_view) -> SymbolRef*;
+        auto find_symbol_eagerly_in(this SemanticAnalyzer const &, ScopeId, std::string_view) -> Symbol const *;
+        auto find_symbol_eagerly_in(this SemanticAnalyzer &, ScopeId, std::string_view) -> Symbol*;
 
 auto register_symbol(this SemanticAnalyzer &, ScopeId, SymbolRef) -> SymbolId;
     private:

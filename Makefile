@@ -5,7 +5,7 @@ SOURCE_DIR  ?= src
 INCLUDE_DIR ?= src
 
 CXX_COMPILER ?= clang++
-CXX_FLAGS = -std=c++26
+CXX_FLAGS = -std=c++26 -Wno-c99-designator
 CXX_OPT_FLAGS    ?= -Wall -Wextra -Werror -I$(INCLUDE_DIR) \
 				-Wno-unused-parameter \
 				-Wno-unused-function \

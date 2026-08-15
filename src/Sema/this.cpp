@@ -80,3 +80,12 @@ auto SemanticAnalyzer::Report(this SemanticAnalyzer &self,
                               Diagnostic &&diagnostic) -> void {
     self.m_diagnostics.Emit(std::move(diagnostic));
 }
+
+auto SemanticAnalyzer::GetCompiler(this SemanticAnalyzer const &self)
+    -> Compiler const & {
+    return self.m_compiler;
+}
+
+auto SemanticAnalyzer::GetCompiler(this SemanticAnalyzer &self) -> Compiler & {
+    return self.m_compiler;
+}

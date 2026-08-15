@@ -10,7 +10,9 @@
 
 Compiler::~Compiler() {}
 
-Compiler::Compiler() : m_packages(), m_sources() {}
+Compiler::Compiler() : m_packages(), m_sources() {
+    m_typeRegistry.InitializeBuiltinTypes();
+}
 
 auto Compiler::OpenSource(this Compiler &self, std::string path)
     -> std::expected<SourceId, std::string> {
@@ -29,7 +31,7 @@ auto Compiler::OpenSource(this Compiler &self, std::string path)
 }
 
 auto Compiler::NewPackage(this Compiler &self, std::string const &name,
-                           SourceId of_root) -> PackageId {
+                          SourceId of_root) -> PackageId {
     Package pkg{name, of_root};
     usize id = self.m_packages.size();
     self.m_packages.push_back(std::move(pkg));
@@ -37,14 +39,12 @@ auto Compiler::NewPackage(this Compiler &self, std::string const &name,
 }
 
 auto Compiler::CompilePackage(this Compiler &self, PackageId pkgid,
-                               DiagnosticPool &diagnostics) -> void {
+                              DiagnosticPool &diagnostics) -> void {
     auto package = self.GetPackage(pkgid).value();
-    if (auto source_file =
-            self.GetSourceFile(package->GetRootSourceFile());
+    if (auto source_file = self.GetSourceFile(package->GetRootSourceFile());
         source_file.has_value()) {
         auto *root_namespace_ = package->get_root();
-        auto root_namespace =
-            static_cast<Namespace *>(root_namespace_->get());
+        auto root_namespace = static_cast<Namespace *>(root_namespace_->get());
         Parser parser{pkgid, diagnostics, self, source_file.value().Content(),
                       package->GetRootSourceFile()};
         ParseIntoNamespace(parser, *root_namespace);
@@ -77,4 +77,12 @@ auto Compiler::GetPackage(this Compiler &self, PackageId id)
 auto Compiler::GetPackage(this Compiler const &self, PackageId id)
     -> std::optional<Package const *> {
     return &self.m_packages[id.id];
+}
+
+auto Compiler::GetRegistry(this Compiler &self) -> TypeRegistry & {
+    return self.m_typeRegistry;
+}
+
+auto Compiler::GetRegistry(this Compiler const &self) -> TypeRegistry const & {
+    return self.m_typeRegistry;
 }

@@ -48,8 +48,8 @@ struct Pointer : public TypeHint {
     Pointer(SourceLocation location, Mutability mutability, TypeHintRef inner)
         : TypeHint(location, mutability, TypeHintKind::Pointer) {}
 
-    auto GetInner(this Pointer const &self) -> TypeHintRef const & {
-        return self.m_inner;
+    auto GetInner(this Pointer const &self) -> TypeHint const * {
+        return self.m_inner.get();
     }
 
   private:

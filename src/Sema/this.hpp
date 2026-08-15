@@ -37,8 +37,10 @@ struct SemanticAnalyzer {
     auto RegisterSymbol(this SemanticAnalyzer &, ScopeId, SymbolRef)
         -> SymbolId;
 
-
     auto Report(this SemanticAnalyzer &, Diagnostic &&) -> void;
+
+    auto GetCompiler(this SemanticAnalyzer const &) -> Compiler const &;
+    auto GetCompiler(this SemanticAnalyzer &) -> Compiler &;
   private:
     PackageId m_packageId;
     Compiler &m_compiler;

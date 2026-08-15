@@ -2,6 +2,7 @@
 
 #include "Common/IdMap.hpp"
 #include "Diagnostic.hpp"
+#include "Entity/Type.hpp"
 #include "Units/Package.hpp"
 #include "Units/SourceFile.hpp"
 #include <expected>
@@ -29,7 +30,10 @@ class Compiler {
     auto GetPackage(this Compiler const &, PackageId id)
         -> std::optional<Package const *>;
 
+    auto GetRegistry(this Compiler &) -> TypeRegistry &;
+    auto GetRegistry(this Compiler const &) -> TypeRegistry const &;
   private:
     std::vector<Package> m_packages;
     IdMap<std::string, SourceFile> m_sources;
+    TypeRegistry m_typeRegistry;
 };

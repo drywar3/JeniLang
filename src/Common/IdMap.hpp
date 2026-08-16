@@ -72,8 +72,8 @@ template <typename Key, typename Value> class IdMap {
     }
 
     auto GetFromIdUnchecked(this IdMap const &self, usize id)
-        -> Value const & {
-        return self.m_pool[id];
+        -> Value const * {
+        return &self.m_pool[id];
     }
 
   private:

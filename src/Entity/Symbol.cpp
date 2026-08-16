@@ -1,4 +1,4 @@
-#include "Entity/Namespace.hpp"
+#include "Entity/Symbol.hpp"
 #include "Lexer/SourceLocation.hpp"
 #include <string>
 #include <string_view>
@@ -8,4 +8,10 @@ Symbol::Symbol(std::string const &name, SourceLocation definition)
 
 auto Symbol::GetName(this Symbol const &self) -> std::string_view {
     return self.m_name.subview();
+}
+
+auto Symbol::GetDefinitionLocation(this Symbol const &self) 
+    -> SourceLocation
+{
+    return self.m_definition;
 }

@@ -43,8 +43,8 @@ auto Compiler::CompilePackage(this Compiler &self, PackageId pkgid,
     auto package = self.GetPackage(pkgid).value();
     if (auto source_file = self.GetSourceFile(package->GetRootSourceFile());
         source_file.has_value()) {
-        auto *root_namespace_ = package->get_root();
-        auto root_namespace = static_cast<Namespace *>(root_namespace_->get());
+        auto *root_namespace_ = package->GetRoot();
+        auto root_namespace = static_cast<Namespace *>(root_namespace_);
         Parser parser{pkgid, diagnostics, self, source_file.value().Content(),
                       package->GetRootSourceFile()};
         ParseIntoNamespace(parser, *root_namespace);

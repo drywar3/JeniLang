@@ -19,7 +19,7 @@ static auto CheckFunctionPrototype(SemanticAnalyzer &sema,
         static_cast<FunctionDeclaration const *>(item);
 
     FunctionSymbol *symbol = static_cast<FunctionSymbol *>(
-        sema.FindSymbolIn(GLOBAL_SCOPE, function->GetName().name));
+        sema.GetSymbolIn(GLOBAL_SCOPE, function->GetName().name));
     if (symbol->PrototypeIsDefined())
         return TaskResult::Completed;
 
@@ -57,7 +57,7 @@ auto sema::CheckFunction(SemanticAnalyzer &sema, Task::Payload payload)
     Item const *item = std::get<Item const *>(payload);
     FunctionDeclaration const *function =
         static_cast<FunctionDeclaration const *>(item);
-    auto *symbol = sema.FindSymbolIn(GLOBAL_SCOPE, function->GetName().name);
+    auto *symbol = sema.GetSymbolIn(GLOBAL_SCOPE, function->GetName().name);
     assert(symbol != nullptr);
 
     if (TaskResult x = CheckFunctionPrototype(sema, item);

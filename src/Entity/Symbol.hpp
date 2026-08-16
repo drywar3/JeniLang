@@ -20,7 +20,7 @@ class Symbol {
     virtual ~Symbol() = default;
 
     auto GetName(this Symbol const &self) -> std::string_view;
-    auto GetDefinition(this Symbol const &self) -> SourceLocation;
+    auto GetDefinitionLocation(this Symbol const &self) -> SourceLocation;
 
   private:
     std::string m_name;

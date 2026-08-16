@@ -17,7 +17,11 @@ struct VariableDeclaration : public Item, public Statement {
           Statement(location, StatementKind::VariableDeclaration),
           m_mutability(mutability) {}
 
-    auto get_name(this VariableDeclaration &self) -> Name & {
+    auto GetName(this VariableDeclaration &self) -> Name & {
+        return self.m_name;
+    }
+
+    auto GetName(this VariableDeclaration const &self) -> Name const & {
         return self.m_name;
     }
 

@@ -38,7 +38,7 @@ auto sema::RegisterFunction(SemanticAnalyzer &sema, ItemRef const &item)
     FunctionDeclaration const *function =
         static_cast<FunctionDeclaration const *>(item.get());
     if (auto symbol =
-            sema.FindSymbolIn(GLOBAL_SCOPE, function->GetName().name)) {
+            sema.GetSymbolIn(GLOBAL_SCOPE, function->GetName().name)) {
         PANIC("redeclaration of symbol: %s", symbol->GetName().data());
     }
     Box<FunctionSymbol> symbol = std::make_unique<FunctionSymbol>(

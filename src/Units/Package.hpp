@@ -6,6 +6,7 @@
 #include "Common/IdMap.hpp"
 #include "Common/this.hpp"
 #include "Entity/Namespace.hpp"
+#include "Entity/Symbol.hpp"
 
 struct StorageId {
     public:
@@ -19,8 +20,8 @@ struct Package {
   public:
     Package(std::string const &name, SourceId ofRootFile);
 
-    auto get_root(this Package const &) -> SymbolRef const *;
-    auto get_root(this Package &) -> SymbolRef *;
+    auto GetRoot(this Package const &) -> Symbol const *;
+    auto GetRoot(this Package &) -> Symbol *;
 
     auto GetRootId(this Package const &) -> SymbolId;
     auto GetRootSourceFile(this Package const &) -> SourceId;

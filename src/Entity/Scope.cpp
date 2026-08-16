@@ -1,22 +1,32 @@
 #include "Entity/Scope.hpp"
+#include "Entity/Symbol.hpp"
 
-Scope::Scope(Scope::parent_ref parent, Kind kind)
-    : m_parent(parent), m_kind(kind), m_storage() {
-
+Scope::Scope(Scope::Parent parent, Kind kind)
+    : m_parent(parent), m_kind(kind), m_storage()
+{
 }
 
-auto Scope::Put(this Scope &self, std::string const& name, SymbolRef symbol) -> SymbolId {
+auto Scope::Put(this Scope &self, std::string const &name, SymbolRef symbol)
+    -> SymbolId
+{
     return SymbolId(self.m_storage.ReplaceOrInsert(name, std::move(symbol)));
 }
 
-auto Scope::GetFromName(this Scope const &self, std::string_view name) -> SymbolRef const * {
-    return self.m_storage.Get(std::string(name));
+auto Scope::GetFromName(this Scope const &self, std::string_view name)
+    -> MaybeUndefined<SymbolId>
+{
+    if (auto id = self.m_storage.IdOf(std::string(name)); id.has_value()) {
+        return SymbolId(id.value());
+    }
+    return std::nullopt;
 }
 
-auto Scope::GetFromName(this Scope &self, std::string_view name) -> SymbolRef * {
-    return self.m_storage.Get(std::string(name));
+auto Scope::GetFromId(this Scope &self, SymbolId id) -> Symbol *
+{
+    return self.m_storage.GetFromIdUnchecked(id.id)->get();
 }
 
-auto Scope::GetFromId(this Scope &self, SymbolId id) -> SymbolRef * {
-    return self.m_storage.GetFromIdUnchecked(id.id);
+auto Scope::GetFromId(this Scope const &self, SymbolId id) -> Symbol const *
+{
+    return self.m_storage.GetFromIdUnchecked(id.id)->get();
 }

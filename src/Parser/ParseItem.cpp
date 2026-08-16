@@ -57,7 +57,7 @@ auto ParseVariableDeclaration(Parser &parser, AttributeList attrs)
     auto var = std::make_unique<VariableDeclaration>(parser.Previous().location,
                                                      mutability, attrs);
     // Parse Name.
-    if (!ParseName(parser, var->get_name()))
+    if (!ParseName(parser, var->GetName()))
         PANIC("could not parse name");
     // Parse Type hint
     if (parser.TryEat(TokenKind::SpColon)) {

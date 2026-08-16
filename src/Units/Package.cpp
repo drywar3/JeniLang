@@ -20,13 +20,13 @@ auto Package::GetRootId(this Package const &self) -> SymbolId {
     return self.m_root;
 }
 
-auto Package::get_root(this Package &self) -> SymbolRef * {
+auto Package::GetRoot(this Package &self) -> Symbol * {
     Scope &rootScope = self.m_scopes[GLOBAL_SCOPE.id];
     auto *symbol = rootScope.GetFromId(SymbolId(0));
     return symbol;
 }
 
-auto Package::get_root(this Package const &self) -> SymbolRef const * { TODO(); }
+auto Package::GetRoot(this Package const &self) -> Symbol const * { TODO(); }
 
 auto Package::GetRootSourceFile(this Package const &self) -> SourceId {
     return self.m_rootSourceFile;
